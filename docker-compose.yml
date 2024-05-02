@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  postgresql:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_INITDB_ARGS: "--data-checksums"
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  hyperf:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: php /data/project/bin/hyperf.php start
+    ports:
+      - 9501:9501
+    restart: always
+    develop:
+      watch:
+        - path: ./
+        - target: /data/project
+        - action: sync
+    volumes:
+      - ${HYPERF_PROJECT_PATH}:/data/project
+    networks:
+      - backend
+      
+volumes:
+  postgresql_data:
+
+networks:
+  backend:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.1.0/24
