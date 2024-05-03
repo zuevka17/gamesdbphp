@@ -12,10 +12,14 @@ declare(strict_types=1);
 
 use Application\Repositories\BasketballLevelsRepository;
 use Application\Repositories\BlockLevelsRepository;
+use Application\Repositories\HistoryRepository;
 use Application\Repositories\UserGamesRepository;
+use Application\Repositories\UserRepository;
 use Domain\BasketballLevelsRepositoryInterface;
 use Domain\BlockLevelsRepositoryInterface;
+use Domain\HistoryRepositoryInterface;
 use Domain\UserGamesRepositoryInterface;
+use Domain\UserRepositoryInterface;
 use Psr\Container\ContainerInterface;
 use Ports\Controller\IndexController;
 
@@ -23,5 +27,7 @@ return [
     ContainerInterface::class => IndexController::class,
     BlockLevelsRepositoryInterface::class => BlockLevelsRepository::class,
     BasketballLevelsRepositoryInterface::class => BasketballLevelsRepository::class,
-    UserGamesRepositoryInterface::class => UserGamesRepository::class
+    UserGamesRepositoryInterface::class => UserGamesRepository::class,
+    HistoryRepositoryInterface::class => HistoryRepository::class,
+    UserRepositoryInterface::class => UserRepository::class
 ];

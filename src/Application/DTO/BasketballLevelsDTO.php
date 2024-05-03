@@ -6,7 +6,7 @@ class BasketballLevelsDTO implements \JsonSerializable
 {
     public ?int $id;
     public ?int $pass_score;
-    public ?float $time_for_level;
+    public ?int $time_for_level;
     public ?string $level_type;
 
     public function __construct(

@@ -12,6 +12,8 @@ declare(strict_types=1);
 use Hyperf\HttpServer\Router\Router;
 use Ports\Controller\BasketballController;
 use Ports\Controller\BlockController;
+use Ports\Controller\HistoryController;
+use Ports\Controller\UserController;
 use Ports\Controller\UserGamesController;
 
 
@@ -39,4 +41,16 @@ Router::addGroup('/usergames', function () {
     Router::post('/edit', [UserGamesController::class, 'edit']);           
     Router::get('/{id}', [UserGamesController::class, 'getById']);
     Router::get('/', [UserGamesController::class, 'getAll']);
+});
+Router::addGroup('/history', function () {
+    Router::post('/add', [HistoryController::class,'add']);
+    Router::get('/{user_id}', [HistoryController::class,'getByUserId']);
+    Router::get('/', [HistoryController::class,'getAll']);
+});
+Router::addGroup('/user', function () {
+    Router::post('/add', [UserController::class,'add']);
+    Router::delete('/remove/{id}', [UserController::class,'remove']);
+    Router::post('/edit', [UserController::class,'edit']);
+    Router::get('/{id}', [UserController::class,'getById']);
+    Router::get('/', [UserController::class,'getAll']);
 });

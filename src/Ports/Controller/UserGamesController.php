@@ -21,6 +21,8 @@ use Application\UseCase\UserGamesUseCase\UserGamesRemoveUseCase;
 use Domain\UserGamesRepositoryInterface;
 use Hyperf\Context\ApplicationContext;
 use Hyperf\HttpServer\Contract\RequestInterface;
+use Hyperf\HttpServer\Contract\ResponseInterface;
+use Hyperf\Validation\ValidatorFactory;
 use Psr\Container\ContainerInterface;
 
 class UserGamesController extends AbstractController
@@ -32,38 +34,79 @@ class UserGamesController extends AbstractController
         $this->container = ApplicationContext::getContainer();
         $this->repository = $this->container->get(UserGamesRepositoryInterface::class);
     }
-    public function add(RequestInterface $request)
+    public function add(RequestInterface $request, ValidatorFactory $validatorFactory, ResponseInterface $response)
     {
-        $data = $request->all();
+        $use_case = new UserGamesAddUseCase($this->repository);
+        $validator = $validatorFactory->make(
+            $data = $request->all(),
+            [
+                'id' => 'required|integer',
+                'game_id' => 'required|integer',
+                'user_id' => 'required|integer',
+                'result' => 'required|integer',          
+            ],
+            [
+                'id.required'=> 'id is required',
+                'id.integer'=> 'id is integer',
+                'game_id.required'=> 'game_id is required',
+                'game_id.integer'=> 'game_id is integer',
+                'user_id.required'=> 'user_id is required',
+                'user_id.integer'=> 'user_id is integer',
+                'result.required'=> 'result is required',
+                'result.integer'=> 'result is integer',
+            ]
+        );
+        if ($validator->fails()) {
+            $error_message = $validator->errors()->all();
+            return $response->json(['error' => $error_message])->withStatus(400);  
+        }
 
         $level = new UserGamesDTO((int)$data['id'], (int)$data['game_id'],(int)$data['user_id'],(int)$data['result']);
-
-        $use_case = new UserGamesAddUseCase($this->repository);
-        $use_case->execute($level);
-        return "added" . "\n" . json_encode($level);
+        return $response->json(['message' => $use_case->execute($level)])->withStatus(200);
     }
-    public function remove(int $id)
+    public function remove(int $id, ResponseInterface $response)
     {
         $use_case = new UserGamesRemoveUseCase($this->repository);
-        return $use_case->execute($id);
+        return $response->json(['message' => $use_case->execute($id)])->withStatus(200);
     }
-    public function edit(RequestInterface $request)
+    public function edit(RequestInterface $request, ValidatorFactory $validatorFactory, ResponseInterface $response)
     {
-        $data = $request->all();
+        $use_case = new UserGamesEditUseCase($this->repository);
+        $validator = $validatorFactory->make(
+            $data = $request->all(),
+            [
+                'id' => 'required|integer',
+                'game_id' => 'required|integer',
+                'user_id' => 'required|integer',
+                'result' => 'required|integer',          
+            ],
+            [
+                'id.required'=> 'id is required',
+                'id.integer'=> 'id is integer',
+                'game_id.required'=> 'game_id is required',
+                'game_id.integer'=> 'game_id is integer',
+                'user_id.required'=> 'user_id is required',
+                'user_id.integer'=> 'user_id is integer',
+                'result.required'=> 'result is required',
+                'result.integer'=> 'result is integer',
+            ]
+        );
+        if ($validator->fails()) {
+            $error_message = $validator->errors()->all();
+            return $response->json(['error' => $error_message])->withStatus(400);  
+        }
 
         $level = new UserGamesDTO((int)$data['id'], (int)$data['game_id'],(int)$data['user_id'],(int)$data['result']);
-
-        $use_case = new UserGamesEditUseCase($this->repository);
-        return $use_case->execute($level);
+        return $response->json(['message'=> $use_case->execute($level)])->withStatus(200);
     }
-    public function getById(int $id)
+    public function getById(int $id, ResponseInterface $response)
     {
         $use_case = new UserGamesGetByIdUseCase($this->repository);
-        return json_encode($use_case->execute($id));
+        return $response->json(['message' => $use_case->execute($id)])->withStatus(200);
     }
-    public function getAll()
+    public function getAll(ResponseInterface $response)
     {
         $use_case = new UserGamesGetAllUseCase($this->repository);
-        return $use_case->execute();
+        return $response->json(['message' => $use_case->execute()])->withStatus(200);
     }
 }
