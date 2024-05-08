@@ -17,7 +17,6 @@ class BasketballLevelsRepository implements BasketballLevelsRepositoryInterface
     public function add(BasketballLevelsDTO $basketball_level): BasketballLevelsDTO
     {
         $basketball_level_id = $this->db::table('basketball_levels')->insertGetId([
-            'id' => $basketball_level->id,
             'pass_score'=> $basketball_level->pass_score,
             'time_for_level'=> $basketball_level->time_for_level,
             'level_type'=> $basketball_level->level_type

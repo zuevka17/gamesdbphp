@@ -13,6 +13,6 @@ class UserRemoveUseCase
     }
     public function execute(int $id): void
     {
-        return $this->userRepository->remove($id);
+        $this->userRepository->remove($id);
     }
 }

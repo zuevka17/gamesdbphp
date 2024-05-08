@@ -49,12 +49,9 @@ class UserController extends AbstractController
     $validator = $validatorFactory->make(
       $data = $request->all(),
       [
-        'id' => 'required|integer',
         'name' => 'required|max:255',
       ],
       [
-        'id.required'=> 'id is required',
-        'id.integer'=> 'id is integer',
         'name.required'=> 'name is required',
       ]
     );
@@ -63,8 +60,8 @@ class UserController extends AbstractController
       return $response->json(['error' => $error_message])->withStatus(400);  
     }
 
-    $user = new UserDTO((int)$data['id'], (string)$data['name']);
-    return $response->json(['message' => $use_case->execute($user)])->withStatus(400); 
+    $user = new UserDTO(null, (string)$data['name']);
+    return $response->json(['message' => $use_case->execute($user)])->withStatus(200); 
   }
   public function remove(int $id, ResponseInterface $response)
   {

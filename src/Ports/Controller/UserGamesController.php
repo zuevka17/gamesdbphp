@@ -40,14 +40,11 @@ class UserGamesController extends AbstractController
         $validator = $validatorFactory->make(
             $data = $request->all(),
             [
-                'id' => 'required|integer',
                 'game_id' => 'required|integer',
                 'user_id' => 'required|integer',
                 'result' => 'required|integer',          
             ],
             [
-                'id.required'=> 'id is required',
-                'id.integer'=> 'id is integer',
                 'game_id.required'=> 'game_id is required',
                 'game_id.integer'=> 'game_id is integer',
                 'user_id.required'=> 'user_id is required',
@@ -61,7 +58,7 @@ class UserGamesController extends AbstractController
             return $response->json(['error' => $error_message])->withStatus(400);  
         }
 
-        $level = new UserGamesDTO((int)$data['id'], (int)$data['game_id'],(int)$data['user_id'],(int)$data['result']);
+        $level = new UserGamesDTO(null, (int)$data['game_id'],(int)$data['user_id'],(int)$data['result']);
         return $response->json(['message' => $use_case->execute($level)])->withStatus(200);
     }
     public function remove(int $id, ResponseInterface $response)

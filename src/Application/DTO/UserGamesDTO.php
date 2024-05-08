@@ -4,10 +4,10 @@ namespace Application\DTO;
 
 class UserGamesDTO implements \JsonSerializable
 {
-    public int $id;
-    public int $game_id;
-    public int $user_id;
-    public int $result;
+    public ?int $id;
+    public ?int $game_id;
+    public ?int $user_id;
+    public ?int $result;
 
 
 

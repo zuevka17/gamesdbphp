@@ -16,13 +16,12 @@ class HistoryRepository implements HistoryRepositoryInterface
     public function add(HistoryDTO $history_entry): HistoryDTO
     {
         $history_id = Db::table('history')->insertGetId([
-            'id' => $history_entry->id,
             'user_id'=> $history_entry->user_id,
             'game_id'=> $history_entry->game_id,
             'result'=> $history_entry->result
         ]);
 
-        $history_entry = Db::table('blocks_levels')->find($history_id);
+        $history_entry = Db::table('history')->find($history_id);
 
         return new HistoryDTO(
             id: (int)$history_entry->id,

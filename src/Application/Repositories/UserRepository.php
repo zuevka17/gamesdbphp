@@ -16,8 +16,14 @@ class UserRepository implements UserRepositoryInterface
     }
     public function add(UserDTO $user_games): UserDTO
     {
+        $check = $this->db::table('users')->where('name', '=', $user_games->name)->first();
+        if($check)
+        {
+            $user_games->id = $check->id;
+            return $user_games;
+        }
+        
         $user_games_id = $this->db::table('users')->insertGetId([
-            'id' => $user_games->id,
             'name' => $user_games->name,
         ]);
 
@@ -25,7 +31,7 @@ class UserRepository implements UserRepositoryInterface
 
         return new UserDTO(
             id: (int) $user_games->id,
-            name: (int) $user_games->name
+            name: $user_games->name
         );
     }
     public function remove(int $id): void
@@ -45,7 +51,7 @@ class UserRepository implements UserRepositoryInterface
         $user_games_data = $this->db::table('users')->find($id);
         $block_level = new UserDTO(
             id: (int) $user_games_data->id,
-            name: (int) $user_games_data->name,
+            name: $user_games_data->name,
         );
 
         return $block_level;
@@ -58,7 +64,7 @@ class UserRepository implements UserRepositoryInterface
         foreach ($users_data as $user) {
             $user_level = new UserDTO(
                 id: (int) $user->id,
-                name: (int) $user->name,
+                name: $user->name,
             );;
             array_push($users, $user_level);
         }

@@ -17,7 +17,6 @@ class BlockLevelsRepository implements BlockLevelsRepositoryInterface
     public function add(BlockLevelsDTO $block_level): BlockLevelsDTO
     {
         $block_level_id = Db::table('blocks_levels')->insertGetId([
-            'id' => $block_level->id,
             'solvable_steps'=> $block_level->solvable_steps,
             'grid_tiles'=> $block_level->grid_tiles
         ]);

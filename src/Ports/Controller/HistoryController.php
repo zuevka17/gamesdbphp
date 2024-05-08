@@ -39,14 +39,11 @@ class HistoryController extends AbstractController
         $validator = $validatorFactory->make(
             $data = $request->all(),
             [
-                'id' => 'required|integer',
                 'user_id'=> 'required|integer',
                 'game_id'=> 'required|integer',
                 'result'=> 'required|integer',
             ],
             [
-                'id.required'=> 'id is required',
-                'id.integer'=> 'id is integer',
                 'user_id.required'=> 'user_id is required',
                 'user_id.integer'=> 'user_id is required',
                 'game_id.required'=> 'game_id is required',
@@ -60,7 +57,7 @@ class HistoryController extends AbstractController
             return $response->json(['error' => $error_message])->withStatus(400);
         }
 
-        $history_entry = new HistoryDTO((int)$data['id'], (int)$data['user_id'], (int)$data['game_id'], (int)$data['result']);
+        $history_entry = new HistoryDTO(null, (int)$data['user_id'], (int)$data['game_id'], (int)$data['result']);
         return $response->json(['message' => $use_case->execute($history_entry)])->withStatus(200);
     }
     public function getByUserId(int $user_id, ResponseInterface $response)

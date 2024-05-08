@@ -18,7 +18,6 @@ class UserGamesRepository implements UserGamesRepositoryInterface
     public function add(UserGamesDTO $user_games): UserGamesDTO
     {
         $user_games_id = $this->db::table('user_games')->insertGetId([
-            'id' => $user_games->id,
             'game_id' => $user_games->game_id,
             'user_id' => $user_games->user_id,
             'result' => $user_games->result
